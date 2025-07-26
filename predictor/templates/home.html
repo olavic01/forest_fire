@@ -1,0 +1,144 @@
+<!--
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Forest Fire Prediction Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!- Leaflet CSS 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        #map {
+            height: 500px;
+            width: 100%;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Forest Fire Risk Detection</h2>
+
+<div id="map"></div>
+<div id="result">Detecting location and predicting risk...</div>
+
+     <!- Leaflet JS ->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    function showMap(lat, lon, prediction) {
+        const map = L.map('map').setView([lat, lon], 8);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        L.marker([lat, lon]).addTo(map)
+            .bindPopup(`<b>Your Location</b><br>${prediction}`)
+            .openPopup();
+    }
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            fetch(`/get-fire-data/?lat=${lat}&lon=${lon}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('result').innerText = "Error: " + data.error;
+                    } else {
+                        document.getElementById('result').innerText = `Prediction: ${data.prediction}`;
+                        showMap(lat, lon, data.prediction);
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('result').innerText = "Error fetching prediction.";
+                });
+        }, function () {
+            document.getElementById('result').innerText = "Geolocation permission denied.";
+        });
+    } else {
+        document.getElementById('result').innerText = "Geolocation not supported by this browser.";
+    }
+</script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Forest Fire Risk - Nigeria Map</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!- Leaflet.js CSS ->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map { height: 90vh; width: 100%; }
+        body { font-family: Arial, sans-serif; margin: 0; }
+        h2 { padding: 10px; text-align: center; }
+    </style>
+</head>
+<body>
+    <h2>🔥 Nigeria Forest Fire Risk Map</h2>
+    <div id="map"></div>
+
+    <!- Leaflet.js JS ->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        const map = L.map('map').setView([9.0820, 8.6753], 6); // Nigeria center
+
+        // OpenStreetMap Tile Layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Optional marker + popup (for test location)
+        const marker = L.marker([9.072264, 7.491302]).addTo(map); // Example: Abuja
+        marker.bindPopup("Abuja - Fire Risk: 🔥 High").openPopup();
+    </script>
+</body>
+</html>
+-->
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Forest Fire Dashboard</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"/>
+</head>
+<body>
+  <h1>🔥 Forest Fire Prediction Dashboard (Nigeria)</h1>
+
+  <div id="map"></div>
+  <div id="fire-info"></div>
+
+  <h2>📈 Weather Trends</h2>
+  <canvas id="chart" width="600" height="300"></canvas>
+
+  <h2>🌦 Weather Forecast</h2>
+  <div id="forecast"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="{% static 'js/dashboard.js' %}"></script>
+</body>
+</html>

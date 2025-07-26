@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🌤 Nigeria Weather Forecast</title>
+</head>
+<body>
+    <h1>🌤 Abuja Weather Forecast (Live)</h1>
+
+    {% if error %}
+        <p style="color: red;">Error fetching weather: {{ error }}</p>
+    {% else %}
+        <ul>
+            <li><strong>Temperature:</strong> {{ temperature }}°C</li>
+            <li><strong>Humidity:</strong> {{ humidity }}%</li>
+            <li><strong>Wind Speed:</strong> {{ wind_speed }} km/h</li>
+            <li><strong>Rain:</strong> {{ rain }} mm</li>
+        </ul>
+    {% endif %}
+</body>
+</html>
